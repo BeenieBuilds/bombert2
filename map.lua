@@ -60,6 +60,39 @@ function Map:getSpawnCoords()
     return self.spawnCoords
 end
 
+function Map:isTouchingObj(ox, oy, width, height)
+    local xPos = ox / self.size
+    local yPos = oy / self.size
+
+    if xPos % 1 < 0.5 then
+        xPos = math.floor(xPos)
+    else
+        xPos = math.ceil(xPos)
+    end
+
+    if yPos % 1 < 0.5 then
+        yPos = math.floor(yPos)
+    else 
+        yPos = math.ceil(yPos)
+    end
+
+    for y = -1, 1 do
+        for x = -1, 1 do
+
+            if not ((yPos + y < 0) or (yPos + y > #self.map) or (xPos + x < 0) or (xPos + x > #self.map[1])) then
+                local e = self.map[yPos+y][xPos+x]:checkBoxColliders(ox, oy, width, height)
+                if e[1] then
+                    return true
+                end
+            end   
+        end
+    end
+
+    return false
+end
+
+
+
 
 function Map:hitboxes(player, dt)
     local xPos = player.x / self.size
@@ -85,9 +118,7 @@ function Map:hitboxes(player, dt)
                 if e[1] then
                     player:onCollide(dt, e[2], e[3])
                 end
-            end
-
-            
+            end   
         end
     end
 end

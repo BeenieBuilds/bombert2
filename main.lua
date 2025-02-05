@@ -9,7 +9,7 @@ function love.load()
 
     love.graphics.setBackgroundColor(love.math.colorFromBytes(210, 210, 220))
     love.graphics.setLineStyle("rough")
-    love.window.setMode(1000, 1000)
+    love.window.setMode(800, 800)
     
     console = Console.new(600, 100, 2, 2)
 
@@ -30,11 +30,11 @@ function love.load()
         },
         0,
         0,
-        77.5
+        60
     )
     map:createMap()
 
-    player = Player.new(32, 2, 0.0001)
+    player = Player.new(20, 2, 0.0001)
     player:setPosition(200,200)
     player.spawnCoords = map:getSpawnCoords()
 
@@ -55,7 +55,7 @@ end
 function love.draw()
 
     console:load()
-    player:drawPlayer(false)
+    player:drawPlayer(map, false)
 
     map:drawMap()
 
@@ -63,6 +63,4 @@ end
 
 function love.keypressed(key, scancode)
     player:changeDirection(key)
-
-
 end

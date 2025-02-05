@@ -30,7 +30,7 @@ function Player.new(size, speed, accel)
         {
             x = instance.x,
             y = instance.y,
-            size = 9,
+            size = instance.size * (9/25.5)*0.8,
             goX = instance.x + (instance.dirX*(instance.size/2)) + (instance.size/2)*instance.dirY,
             goY = instance.y  + (instance.dirY*(instance.size/2)) + (instance.size/2)*instance.dirX,
             vel = 3,
@@ -38,7 +38,7 @@ function Player.new(size, speed, accel)
         {
             x = instance.x,
             y = instance.y,
-            size = 9,
+            size = instance.size * (9/25.5) *0.8,
             goX = instance.x + (instance.dirX*(instance.size/2)) - (instance.size/2)*instance.dirY,
             goY = instance.y  + (instance.dirY*(instance.size/2)) - (instance.size/2)*instance.dirX,
             vel = 3,
@@ -100,9 +100,9 @@ function Player:onCollide(dt, obj, face)
     end
 end
 
-function Player:drawPlayer(hitbox)
+function Player:drawPlayer(map, hitbox)
 
-    self.visual:drawCircle(self.x, self.y, 25.5, 1, 1, 16, "fill", 1, 6,14,81)
+    self.visual:drawExpandingCircle(self.x, self.y, self.size*0.8, 1, 1, 16, "fill", 1, 6,14,81, map)
 
     self:drawEyes()
 
@@ -112,7 +112,7 @@ function Player:drawPlayer(hitbox)
 end
 
 function Player:updateBody(dt)
-    player:updateEyes(15, 17.5, dt)
+    player:updateEyes(self.size * (15/25.5)*0.8, self.size * (17/25.5)*0.8, dt)
     self.speed = self.speed + self.accel
 end
 

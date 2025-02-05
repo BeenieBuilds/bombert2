@@ -29,6 +29,37 @@ function Visual:drawCircle(x, y, radius, amp, speed, verts, fill, lineWidth, hex
     love.graphics.polygon(fill, circle)
 end
 
+function Visual:drawExpandingCircle(x, y, radius, amp, speed, verts, fill, lineWidth, hex1, hex2, hex3, map)
+    local circle = {}
+    local inc = 360/verts
+
+    for i = 1, verts do
+
+        local e = degToRad(inc*i)
+
+        local circleX
+        local circleY
+
+        for z = 1, 16 do 
+            circleX = x +  (e[1] * (radius/16) * z) + amp * math.sin((math.pi/2)*(timer*speed) + i)
+            circleY = y +  (e[2] * (radius/16) * z) + amp * math.sin((math.pi/2)*(timer*speed) + i)
+            if map:isTouchingObj(circleX, circleY, 2, 2) then
+                circleX = x
+                circleY = y
+            end
+        end
+
+        circle[#circle+1] = circleX
+        circle[#circle+1] = circleY
+    end 
+
+    love.graphics.setColor(love.math.colorFromBytes(hex1, hex2, hex3))
+    love.graphics.setLineWidth(lineWidth)
+    
+    love.graphics.polygon(fill, circle)
+end
+
+
 function Visual:drawSpikes(x, y, width, height, amp, speed, verts, fill, lineWidth, hex1, hex2, hex3)
     local dirs = {
         {-1, -1, 1, 0, 0, -1}, --top left
