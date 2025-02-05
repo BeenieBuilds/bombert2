@@ -25,7 +25,7 @@ local function getNameFromChar(char)
     local o = Objs
     for i = 1, #o do
         if char == o[i][1] then
-            return {o[i][2], o[i][3]}
+            return {o[i][2], o[i][3], o[i][4]}
         end
     end
     return "None"
@@ -50,7 +50,8 @@ function Map:createMap()
                 self.x + self.size*x,
                 self.y + self.size*y,
                 self.size,
-                e[2]
+                e[2],
+                e[3]
             )
             
             if self.map[y][x].type == "In" then
@@ -64,7 +65,7 @@ function Map:getSpawnCoords()
     return self.spawnCoords
 end
 
-
+-- used for checking hitboxes between a living, breathing entity and the map
 function Map:hitboxes(player, dt)
     local xPos = player.x / self.size
     local yPos = player.y / self.size
@@ -87,15 +88,16 @@ function Map:hitboxes(player, dt)
             if not ((yPos + y <= 0) or (yPos + y > #self.map) or (xPos + x <= 0) or (xPos + x > #self.map[1])) then
                 local e = self.map[yPos+y][xPos+x]:checkBoxColliders(player.x, player.y, player.size, player.size)
                 if e[1] then
-                    player:onCollide(dt, e[2], e[3])
-                end
-            end
 
-            
+                    player:onCollide(dt, e[2], e[3])
+
+                end
+            end    
         end
     end
 end
 
+-- used for checking collisions between particles that dont inherently have an x, y or size and the map
 function Map:isTouchingObj(ox, oy, width, height)
     local xPos = ox / self.size
     local yPos = oy / self.size
@@ -167,6 +169,17 @@ function Map:drawMap()
             local s = self.map[y][x]
             if not (s.type == "None") then
                 s:draw()
+            end
+        end
+    end
+end
+
+function Map:updateMap(dt)
+    for y = 1, #self.map do
+        for x = 1, #self.map[1] do
+            local s = self.map[y][x]
+            if not (s.type == "None") then
+                s:update()
             end
         end
     end

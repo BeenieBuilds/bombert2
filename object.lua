@@ -9,7 +9,7 @@ Object.__index = Object
 
 
 
-function Object.new(type, x, y, size, collide)
+function Object.new(type, x, y, size, collide, collisionType)
     local instance = setmetatable({}, Object)
 
     instance.type = type
@@ -18,6 +18,9 @@ function Object.new(type, x, y, size, collide)
     instance.size = size
     instance.visual = Visual.new()
     instance.collide = collide
+
+    instance.collisionType = collisionType
+    instance.int = 0
 
     instance.colliders = {}
 
@@ -49,13 +52,26 @@ end
 
 function Object:checkBoxColliders(x, y, width, height)
     local s = self.colliders 
+    
     for i = 1, #s do
 
-        if checkCollision(x, y, width, height, s[i].x, s[i].y, s[i].width, s[i].height) then
-            -- returns collision, object it collides into, and face
-            return {true, self, s[i].face}
+        if self.collisionType == "Always" then
+        -- returns collision, object it collides into, and face
+
+            if checkCollision(x, y, width, height, s[i].x, s[i].y, s[i].width, s[i].height) then
+                return {true, self, s[i].face, self.int}
+            end
+
+        elseif self.collisionType == "Battery" then
+
+            if checkCollision(x, y, width, height, s[i].x, s[i].y, s[i].width, s[i].height) and self.int > 0 then
+                self.int = self.int - 0.05
+                return {true, self, s[i].face, self.int}
+            end
         end
+
     end
+    
     -- returns collision only
     return {false}
 end
@@ -87,5 +103,22 @@ function Object:draw()
     end
     if self.type == "Edge" then
         self.visual:drawBlock(self.x, self.y, self.size, self.size, 7, "fill", 1, 32, 32, 48)
+    end
+    if self.type == "Speed" then
+        self.visual:drawSineBlock(self.x, self.y, self.size*0.5 + self.size*0.4*self.int , self.size*0.5 + self.size*0.4*self.int, 1, 20, 8, "line", 4, 240, 20, 20)
+    end
+    if self.type == "Slow" then
+        self.visual:drawSineBlock(self.x, self.y, self.size*0.5 + self.size*0.4*self.int , self.size*0.5 + self.size*0.4*self.int, 1, 20, 8, "line", 4, 240, 20, 20)
+    end
+end
+
+function Object:update()
+
+    if self.collisionType == "Always" then
+
+    elseif self.collisionType == "Battery" then
+        if self.int < 1 then
+            self.int = self.int + 0.005
+        end
     end
 end

@@ -109,6 +109,10 @@ function Player:onCollide(dt, obj, face)
         self:kill()
     elseif obj.type == "Edge" then
         self:collision(face)
+    elseif obj.type == "Speed" then
+        self.speed = self.speed + 0.05
+    elseif obj.type == "Slow" then
+        self.speed = self.speed - 0.05
     end
 end
 

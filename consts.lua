@@ -8,13 +8,16 @@ Dirs = {
 }
 
 Objs = {
-    {" ", "None", false},
-    {"f", "Foam", true},
-    {"e", "Edge", true},
-    {"x", "EdgeRock", true},
-    {"r", "Rock", true},
-    {"i", "In", false},
-    {"o", "Out", false}
+    -- character, name, collide, collisionType
+    {" ", "None", false, "Always"},
+    {"f", "Foam", true, "Always"},
+    {"e", "Edge", true, "Always"},
+    {"x", "EdgeRock", true, "Always"},
+    {"r", "Rock", true, "Always"},
+    {"i", "In", false, "Always"},
+    {"o", "Out", false, "Always"},
+    {"^", "Speed", false, "Battery"},
+    {"v", "Slow", false, "Battery"},
 }
 
 timer = 0

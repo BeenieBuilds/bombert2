@@ -82,8 +82,8 @@ function Visual:drawSineBlock(x, y, width, height, amp, speed, verts, fill, line
         drawY = y + dirs[i][2]*height/2
         for o=1, verts do
 
-            drawX = drawX + (width/verts)*dirs[i][3] + amp*dirs[i][4]*math.sin(math.pi/2 * (speed*game.timer) + o)
-            drawY = drawY + (height/verts)*dirs[i][4] + amp*dirs[i][3]*math.sin(math.pi/2 * (speed*game.timer) + o)
+            drawX = drawX + (width/verts)*dirs[i][3] + amp*dirs[i][4]*math.sin(math.pi/2 * (speed*timer) + o)
+            drawY = drawY + (height/verts)*dirs[i][4] + amp*dirs[i][3]*math.sin(math.pi/2 * (speed*timer) + o)
 
             poly[#poly+1] = drawX
             poly[#poly+1] = drawY
